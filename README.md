@@ -1,8 +1,19 @@
 # ChromaCosm (VST3 & Standalone Audio Plugin)
 
-Dual studio multi-effects processor combining the warm, vintage instability of the **Hologram Electronics Chroma Console** with the granular synthesis, micro-looping, and glitch multi-delays of the **Hologram Electronics Microcosm**.
+Dual studio multi-effects processor combining the warm, vintage instability of the **Chroma Console** with the granular synthesis, micro-looping, and glitch multi-delays of the **Microcosm**.
 
-Built in modern C++ with JUCE. Features an authentic hardware-inspired interface with interactive controls, real-time waveform & grain cloud visualizer, built-in guide, hover descriptions, and safe, anti-blowup DSP design.
+[![Download Release](https://img.shields.io/badge/Download-Windows%20v1.0.0%20(Pre--Compiled)-orange?style=for-the-badge&logo=windows)](https://github.com/DaMa-sys/ChromaCosm/releases/latest)
+[![Website](https://img.shields.io/badge/Official-Website%20Showcase-blue?style=for-the-badge)](https://dama-sys.github.io/ChromaCosm/)
+
+---
+
+## ⚡ Download Ready-To-Use Plugin (No Compilation Required)
+If you don't want to build from source, download the pre-compiled binary package:
+👉 **[Download ChromaCosm-Windows-v1.0.0.zip](https://github.com/DaMa-sys/ChromaCosm/releases/download/v1.0.0/ChromaCosm-Windows-v1.0.0.zip)**
+
+Inside the ZIP:
+1. `ChromaCosm.vst3` — Copy to `C:\Program Files\Common Files\VST3\` to use in Ableton Live, FL Studio, Reaper, Cubase, Studio One.
+2. `ChromaCosm.exe` — Standalone app (run directly to play without opening a DAW).
 
 ---
 
