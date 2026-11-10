@@ -706,10 +706,10 @@ void ChromaCosmAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xFFF5F2EB));
     g.setFont (uiFont (18.0f, true));
-    g.drawText ("CHROMACOSM", 52, 8, 220, 22, juce::Justification::centredLeft);
+    g.drawText ("DaMA // CHROMACOSM", 52, 8, 220, 22, juce::Justification::centredLeft);
     g.setColour (juce::Colour (0xFFA0A0B0));
     g.setFont (uiFont (10.5f));
-    g.drawText ("CHROMA CONSOLE + MICROCOSM", 52, 29, 220, 16, juce::Justification::centredLeft);
+    g.drawText ("COLOR CONSOLE + COSMIC GRANULAR", 52, 29, 220, 16, juce::Justification::centredLeft);
 
     // BPM readout
     const double bpm = audioProcessor.getEffectiveBpm();
@@ -761,7 +761,7 @@ void ChromaCosmAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xFF222226));
     g.setFont (uiFont (21.0f, true));
-    g.drawText ("CHROMA CONSOLE", 34, 74, 240, 26, juce::Justification::centredLeft);
+    g.drawText ("CHROMA ENGINE", 34, 74, 240, 26, juce::Justification::centredLeft);
     g.setFont (uiFont (11.0f, true));
     g.setColour (juce::Colour (0xFF666258));
     g.drawText ("MULTI-EFFECTOR // SIGNAL CHAIN:", 34, 98, 220, 16, juce::Justification::centredLeft);
@@ -905,7 +905,7 @@ void ChromaCosmAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xFF222228));
     g.setFont (uiFont (21.0f, true));
-    g.drawText ("MICROCOSM", 664, 74, 210, 26, juce::Justification::centredLeft);
+    g.drawText ("COSMIC GRANULAR", 664, 74, 210, 26, juce::Justification::centredLeft);
     g.setFont (uiFont (11.0f, true));
     g.setColour (juce::Colour (0xFF66645E));
     g.drawText ("GRANULAR LOOPER & MULTIDELAY", 664, 98, 230, 16, juce::Justification::centredLeft);

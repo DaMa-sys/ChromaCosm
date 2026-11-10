@@ -70,6 +70,13 @@ The compiled artefacts will be located in:
 
 ---
 
-## 📄 License
-This project is open-source under the MIT License.
-Inspired by the hardware designs and concept of Hologram Electronics. All product names and trademarks belong to their respective owners.
+## 📄 Legal Disclaimer & Trademarks
+
+**DaMA ChromaCosm** is an independent, non-commercial open-source audio research project developed by **DaMA Audio**.
+
+- All product names, logos, and brands mentioned (including *Hologram Electronics*, *Chroma Console*, and *Microcosm*) are the registered trademarks and intellectual property of their respective owners.
+- Their mention here is purely descriptive and for comparative/educational reference regarding audio topology and workflow inspiration.
+- This software is NOT endorsed, sponsored, affiliated with, or produced by Hologram Electronics.
+- All algorithms are original C++/JUCE DSP implementations.
+
+Licensed under the MIT License.
