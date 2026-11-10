@@ -1,0 +1,26 @@
+# Build directories
+build/
+bin/
+obj/
+*.dir/
+
+# Visual Studio / IDE files
+.vs/
+*.vcxproj*
+*.sln
+*.code-workspace
+.idea/
+.vscode/
+
+# JUCE generated files
+JuceLibraryCode/
+*_artefacts/
+
+# Compiled binaries
+*.vst3
+*.exe
+*.dll
+*.lib
+*.exp
+*.pdb
+*.ilk
