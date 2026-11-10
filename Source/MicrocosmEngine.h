@@ -231,9 +231,12 @@ public:
             reverbEngine.setParameters (rp);
         }
 
+        // Exponential non-linear Activity curve (as demonstrated in official Microcosm videos:
+        // lower half = sparse, distinct rhythmic events; upper half = dense, immersive stereo micro-texture)
         const float act = juce::jlimit (0.0f, 1.0f, p.activity);
-        const double densityFactor = 0.20 + (1.0 - act) * 1.25;
-        int spawnInterval = juce::jmax (192, static_cast<int> (sampleRate * beatSec * 0.25 * densityFactor));
+        const float expAct = act * act; 
+        const double densityFactor = 0.12 + (1.0f - expAct) * 1.55;
+        int spawnInterval = juce::jmax (160, static_cast<int> (sampleRate * beatSec * 0.22 * densityFactor));
         int stepInterval  = juce::jmax (256, static_cast<int> (sampleRate * beatSec * 0.25));
 
         for (int i = 0; i < numSamples; ++i)
@@ -438,6 +441,7 @@ private:
         {
             case FX_Mosaic:
             {
+                // In Microcosm official video, higher Activity adds stochastic octave sparkles and 5ths
                 const float mosaicRates[4][4] = {
                     { 1.0f, 2.0f, 1.0f, 0.5f },
                     { 2.0f, 2.0f, 1.0f, 1.5f },
@@ -445,9 +449,12 @@ private:
                     { 0.5f, 0.75f, 1.0f, 1.5f }
                 };
                 pitchRate = mosaicRates[var][currentStep & 3];
+                // Stochastic sparkle at high activity
+                if (p.activity > 0.65f && rnd1 > 0.6f)
+                    pitchRate *= (rnd2 > 0.5f ? 2.0f : 1.5f);
                 targetRate = pitchRate;
-                grainDurSec = beatSec * (0.35 + 0.15 * (currentStep & 1));
-                delayOffsetSec = beatSec * (0.25 + 0.25 * (currentStep & 3));
+                grainDurSec = beatSec * (0.32 + 0.18 * (currentStep & 1));
+                delayOffsetSec = beatSec * (0.22 + 0.28 * (currentStep & 3));
                 break;
             }
             case FX_Seq:

@@ -308,14 +308,26 @@ public:
                 sigR = sigR * 0.35f + capR * 0.85f;
             }
 
-            // Organic Drift LFO
-            driftPhase1 += 0.43 / sampleRate;
-            if (driftPhase1 >= 1.0) driftPhase1 -= 1.0;
-            driftPhase2 += 1.17 / sampleRate;
-            if (driftPhase2 >= 1.0) driftPhase2 -= 1.0;
+        // Multi-frequency organic Pink/Perlin-style drift generator (mimics worn tape motor & thermal drift)
+        driftPhase1 += 0.37 / sampleRate;
+        if (driftPhase1 >= 1.0) driftPhase1 -= 1.0;
+        driftPhase2 += 0.93 / sampleRate;
+        if (driftPhase2 >= 1.0) driftPhase2 -= 1.0;
+        driftPhase3 += 2.41 / sampleRate;
+        if (driftPhase3 >= 1.0) driftPhase3 -= 1.0;
 
-            const float driftVal = 0.65f * std::sin (static_cast<float> (driftPhase1 * juce::MathConstants<double>::twoPi))
-                                 + 0.35f * std::sin (static_cast<float> (driftPhase2 * juce::MathConstants<double>::twoPi));
+        // Random micro-glitch walk
+        if (++driftNoiseCounter >= static_cast<int> (sampleRate * 0.12))
+        {
+            driftNoiseCounter = 0;
+            driftTargetWalk = nextWhiteNoise() * 0.35f;
+        }
+        driftWalk = 0.996f * driftWalk + 0.004f * driftTargetWalk;
+
+        const float driftVal = 0.52f * std::sin (static_cast<float> (driftPhase1 * juce::MathConstants<double>::twoPi))
+                             + 0.28f * std::sin (static_cast<float> (driftPhase2 * juce::MathConstants<double>::twoPi))
+                             + 0.12f * std::sin (static_cast<float> (driftPhase3 * juce::MathConstants<double>::twoPi))
+                             + 0.08f * driftWalk;
 
             for (int slot = 0; slot < 4; ++slot)
             {
@@ -659,22 +671,28 @@ private:
             case Diff_Reels:
             {
                 float tapeL = readInterpSafe (diffDelayL, diffWritePos, baseSamp);
-                float tapeR = readInterpSafe (diffDelayR, diffWritePos, baseSamp * 1.015f);
+                float tapeR = readInterpSafe (diffDelayR, diffWritePos, baseSamp * 1.018f);
 
-                diffLpL = sanitizeAudio (0.28f * tapeL + 0.72f * diffLpL);
-                diffLpR = sanitizeAudio (0.28f * tapeR + 0.72f * diffLpR);
+                // Authentic Reel-to-Reel tape head saturation + progressive bandpass degradation per repeat
+                // Cutoff shifts down progressively, cutting sub-bass (<140Hz) and smoothing harsh highs (>5kHz)
+                float lpFreq = juce::jlimit (1800.0f, 6500.0f, 4800.0f - amt * 1800.0f);
+                float alphaLp = std::exp (-2.0f * juce::MathConstants<float>::pi * lpFreq / static_cast<float> (sampleRate));
+                diffLpL = sanitizeAudio ((1.0f - alphaLp) * tapeL + alphaLp * diffLpL);
+                diffLpR = sanitizeAudio ((1.0f - alphaLp) * tapeR + alphaLp * diffLpR);
 
-                diffHpL = sanitizeAudio (0.985f * (diffHpL + diffLpL - diffPrevInL));
-                diffHpR = sanitizeAudio (0.985f * (diffHpR + diffLpR - diffPrevInR));
+                diffHpL = sanitizeAudio (0.975f * (diffHpL + diffLpL - diffPrevInL));
+                diffHpR = sanitizeAudio (0.975f * (diffHpR + diffLpR - diffPrevInR));
                 diffPrevInL = diffLpL;
                 diffPrevInR = diffLpR;
 
-                wetL = std::tanh (diffHpL * 1.35f);
-                wetR = std::tanh (diffHpR * 1.35f);
+                // Warm tape compression & magnetic head saturation in the feedback path
+                wetL = std::tanh (diffHpL * 1.45f);
+                wetR = std::tanh (diffHpR * 1.45f);
 
-                float fb = juce::jlimit (0.15f, 0.86f, 0.20f + amt * 0.65f);
-                diffDelayL[diffWritePos] = std::tanh (l + wetL * fb);
-                diffDelayR[diffWritePos] = std::tanh (r + wetR * fb);
+                float fb = juce::jlimit (0.15f, 0.88f, 0.22f + amt * 0.64f);
+                // Tape cross-bleed in stereo repeats
+                diffDelayL[diffWritePos] = std::tanh (l + (wetL * 0.88f + wetR * 0.12f) * fb);
+                diffDelayR[diffWritePos] = std::tanh (r + (wetR * 0.88f + wetL * 0.12f) * fb);
                 break;
             }
             case Diff_Space:
@@ -922,7 +940,9 @@ private:
     float dcBlockX_L = 0.0f, dcBlockY_L = 0.0f, dcBlockX_R = 0.0f, dcBlockY_R = 0.0f;
 
     double lfoPhase = 0.0;
-    double driftPhase1 = 0.0, driftPhase2 = 0.37;
+    double driftPhase1 = 0.0, driftPhase2 = 0.37, driftPhase3 = 0.71;
+    float driftWalk = 0.0f, driftTargetWalk = 0.0f;
+    int driftNoiseCounter = 0;
     double pitchPhase = 0.0;
     std::array<float, 6> phaserStagesL { 0.0f }, phaserStagesR { 0.0f };
     float phaserFbL = 0.0f, phaserFbR = 0.0f;
