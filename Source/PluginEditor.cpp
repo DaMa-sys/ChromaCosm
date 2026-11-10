@@ -515,6 +515,12 @@ ChromaCosmAudioProcessorEditor::ChromaCosmAudioProcessorEditor (ChromaCosmAudioP
     registerControlDescription (microHoldBtn, "HOLD SAMPLER",
         "Congela il buffer dei grani: l'effetto continua a suonare all'infinito quello che hai appena suonato, e tu puoi suonarci sopra.");
 
+    addAndMakeVisible (microFxOffBtn);
+    buttonAttachments.push_back (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (
+        audioProcessor.apvts, "microFxOff", microFxOffBtn));
+    registerControlDescription (microFxOffBtn, "LOOPER ONLY",
+        "Disattiva la generazione dei grani (come nel video tutorial ufficiale Hologram): puoi usare il Microcosm come un looper pulito con Space Reverb, chorus e filtro analogico.");
+
     addAndMakeVisible (microBypassBtn);
     buttonAttachments.push_back (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (
         audioProcessor.apvts, "microBypass", microBypassBtn));
@@ -1142,8 +1148,9 @@ void ChromaCosmAudioProcessorEditor::resized()
     looperRevBtn.setBounds     (1078, 612, 82,  32);
     looperPreBtn.setBounds     (1164, 612, 72,  32);
 
-    microHoldBtn.setBounds   (676, 678, 240, 44);
-    microBypassBtn.setBounds (986, 678, 240, 44);
+    microHoldBtn.setBounds   (676, 678, 175, 44);
+    microFxOffBtn.setBounds  (858, 678, 150, 44);
+    microBypassBtn.setBounds (1016, 678, 210, 44);
 
     guideOverlay.setBounds (getLocalBounds());
 }

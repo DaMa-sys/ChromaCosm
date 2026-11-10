@@ -256,6 +256,7 @@ private:
     juce::ToggleButton microSyncBtn { "SYNC" };
     juce::ToggleButton microRevBtn  { "REV" };
     juce::ToggleButton microHoldBtn { "HOLD SAMPLER" };
+    juce::ToggleButton microFxOffBtn { "LOOPER ONLY" };
     juce::ToggleButton microBypassBtn { "BYPASS" };
 
     // Phrase Looper Controls

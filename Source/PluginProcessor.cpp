@@ -151,6 +151,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout ChromaCosmAudioProcessor::cr
         "microPitchDepth", "Pitch Mod Depth", juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.25f));
 
     params.push_back (std::make_unique<juce::AudioParameterBool> (
+        "microFxOff", "Looper Only / Granular Off", false));
+    params.push_back (std::make_unique<juce::AudioParameterBool> (
         "microReverse", "Microcosm Reverse", false));
     params.push_back (std::make_unique<juce::AudioParameterBool> (
         "microHold", "Hold Sampler", false));
@@ -417,7 +419,9 @@ void ChromaCosmAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     mp.pitchModDepth = apvts.getRawParameterValue ("microPitchDepth")->load();
     mp.reverse       = apvts.getRawParameterValue ("microReverse")->load() > 0.5f;
     mp.holdSampler   = apvts.getRawParameterValue ("microHold")->load() > 0.5f;
-    mp.bypass        = apvts.getRawParameterValue ("microBypass")->load() > 0.5f;
+    mp.bypass        = (apvts.getRawParameterValue ("microBypass")->load() > 0.5f);
+    if (apvts.getRawParameterValue ("microFxOff")->load() > 0.5f)
+        mp.activity = 0.0f; // Disables granular spawner completely, leaving Space Reverb, Filter & Looper active!
 
     mp.loopLevel     = apvts.getRawParameterValue ("loopLevel")->load();
     mp.loopSpeed     = static_cast<int> (apvts.getRawParameterValue ("loopSpeed")->load());
