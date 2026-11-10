@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DaMA ChromaCosm — Dual Studio Multi-FX Plugin</title>
+  <meta name="description" content="Plugin VST3 & Standalone ispirato a Chroma Console e Microcosm. Calore analogico, modulazioni, delay a nastro e nuvole granulari in un unico processore audio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f1015;
+      --bg-card: #181922;
+      --bg-pedal-left: #f3efe6;
+      --bg-pedal-right: #f4f3ef;
+      --accent-red: #e04838;
+      --accent-yellow: #eca820;
+      --accent-green: #28a45e;
+      --accent-blue: #2d82c6;
+      --accent-coral: #e05a47;
+      --accent-teal: #3e8e9e;
+      --text-main: #f5f2eb;
+      --text-muted: #9fa0b2;
+      --border: #2a2c3a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 50% 0%, #1f2130 0%, #0f1015 65%);
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-stripes {
+      display: flex;
+      gap: 3px;
+    }
+    .brand-stripes span {
+      display: block;
+      width: 4px;
+      height: 24px;
+      border-radius: 2px;
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.5px;
+    }
+    .brand-title span { color: var(--accent-yellow); }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(236, 168, 32, 0.12);
+      border: 1px solid rgba(236, 168, 32, 0.35);
+      color: var(--accent-yellow);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #fff 30%, #eca820 70%, #e05a47 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e05a47, #eca820);
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(224, 90, 71, 0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(224, 90, 71, 0.45);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .download-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .pedals-preview {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .pedal-card {
+      background: #171822;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .pedal-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .pedal-card h3 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+    .feature-list li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .feature-list li span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .features-grid {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+    }
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .feature-box h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .install-box {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 2.5rem;
+      background: #14151e;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+    .install-box h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .code-block {
+      background: #090a0d;
+      border: 1px solid #232530;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: #eca820;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 4rem auto 0;
+      padding: 3rem 1.5rem 4rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    footer a { color: var(--accent-yellow); text-decoration: none; }
+
+    @media (max-width: 800px) {
+      .pedals-preview { grid-template-columns: 1fr; }
+      header { flex-direction: column; gap: 1rem; }
+      .nav-links a { margin: 0 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand">
+      <div class="brand-stripes">
+        <span style="background: var(--accent-red)"></span>
+        <span style="background: var(--accent-yellow)"></span>
+        <span style="background: var(--accent-green)"></span>
+        <span style="background: var(--accent-blue)"></span>
+      </div>
+      <div class="brand-title">DaMA <span>ChromaCosm</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="#pedals">Panoramica</a>
+      <a href="#features">Caratteristiche</a>
+      <a href="#install">Installazione</a>
+      <a href="https://github.com/DaMa-sys/ChromaCosm" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">VST3 & Standalone Audio Plugin • 64-Bit</div>
+      <h1>L'Alchimia Sonora di Due Pedali Leggendari in un <span class="hero-gradient">Unico Processore</span></h1>
+      <p>Un tributo boutique che fonde il calore, il pitch drift e le saturazioni di console vintage con la magia granulare, gli arpeggi glitch e i delay a sezione aurea.</p>
+
+      <div class="cta-group">
+        <a href="download/ChromaCosm-Windows-v1.0.0.zip" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Scarica per Windows (v1.0.0)
+        </a>
+        <a href="https://github.com/DaMa-sys/ChromaCosm" target="_blank" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          Sorgente su GitHub
+        </a>
+      </div>
+      <div class="download-meta">Include VST3 (Ableton / FL / Reaper / Cubase) + App Standalone (.exe) • 7.3 MB ZIP</div>
+    </section>
+
+    <!-- PEDALS SECTION -->
+    <section class="pedals-preview" id="pedals">
+      
+      <!-- CHROMA ENGINE CARD -->
+      <div class="pedal-card">
+        <div class="pedal-tag" style="color: var(--accent-yellow)">Pannello Sinistro</div>
+        <h3>CHROMA ENGINE</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Catena di 4 moduli liberamente riordinabili che scolpiscono il tono con la grana e l'instabilità degli apparecchi da studio vintage.</p>
+
+        <ul class="feature-list">
+          <li><span class="dot" style="background: var(--accent-red)"></span> <strong>CHARACTER:</strong> Drive valvolare, Preamp Sweeten, Fuzz al silicio, Howl risonante e Volume Swell automatico.</li>
+          <li><span class="dot" style="background: var(--accent-yellow)"></span> <strong>MOVEMENT:</strong> Doubler ADT a nastro, Vibrato BBD, Phaser a 6 stadi, Tremolo stereo e Pitch Shifter (-12..+12 st).</li>
+          <li><span class="dot" style="background: var(--accent-green)"></span> <strong>DIFFUSION:</strong> Delay Cascade, eco Reels a nastro con wow/flutter, Space Reverb, Collage ritmico e Reverse delay.</li>
+          <li><span class="dot" style="background: var(--accent-blue)"></span> <strong>TEXTURE:</strong> Filtro morphing LPF/HPF, compressore Squash, deck a Cassetta 4 piste, Broken circuit-bending e Radio static.</li>
+          <li><span class="dot" style="background: #fff"></span> <strong>CAPTURE:</strong> Tasto sustainer per congelare ed eseguire loop istantanei mentre continui a suonare.</li>
+        </ul>
+      </div>
+
+      <!-- COSMIC GRANULAR CARD -->
+      <div class="pedal-card">
+        <div class="pedal-tag" style="color: var(--accent-coral)">Pannello Destro</div>
+        <h3>COSMIC GRANULAR</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Generatore granulare, micro-looping ritmico e delay multi-tap con 11 algoritmi × 4 variazioni di accordi e pattern (44 preset).</p>
+
+        <ul class="feature-list">
+          <li><span class="dot" style="background: var(--accent-coral)"></span> <strong>MICRO LOOP:</strong> Mosaic (ottave sovrapposte 0.5x/1x/2x), Seq (sequencer a 8 step), Glide (portamento continuo).</li>
+          <li><span class="dot" style="background: #d99b26"></span> <strong>GRANULES:</strong> Haze (nuvole ambient vellutate), Tunnel (droni ipnotici), Strum (arpa granulare reattiva ai transienti).</li>
+          <li><span class="dot" style="background: var(--accent-teal)"></span> <strong>GLITCH:</strong> Blocks (stutter ritmici quantizzati), Interrupt (ducking dry con burst), Arp (arpeggiatore su accordi M/m7/sus).</li>
+          <li><span class="dot" style="background: #3b7a57"></span> <strong>MULTI-DELAY:</strong> Pattern (tap ritmici e sezione aurea), Warp (echi fluttuanti e deformati).</li>
+          <li><span class="dot" style="background: #4ea8b8"></span> <strong>HOLD & LOOPER:</strong> Congelamento infinito con Hold Sampler + Phrase Looper stereo da 40 secondi con velocità 0.5x/1x/2x e Reverse.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- CORE FEATURES -->
+    <section class="features-grid" id="features">
+      <div class="feature-box">
+        <div class="feature-icon">🔀</div>
+        <h4>Combo Routing a 3 Vie</h4>
+        <p>Scegli liberamente se mandare il Chroma dentro il Granulare, i granuli dentro il tape/fuzz del Chroma, oppure sommarli in parallelo 50/50.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">📖</div>
+        <h4>Guida a 4 Schede Integrata</h4>
+        <p>Premi <strong>? GUIDA</strong> dentro al plugin per aprire in qualsiasi momento il manuale d'uso completo senza uscire dalla tua DAW.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">💡</div>
+        <h4>Toggle Info Mouse</h4>
+        <p>Attiva o disattiva con un clic le descrizioni in tempo reale di ogni pomello, tasto ed effetto visibili direttamente nel banner in basso.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🛡️</div>
+        <h4>Filtri TPT Anti-Glitch</h4>
+        <p>Nessun crash o ammutolimento: i filtri a variabili di stato e i buffer di feedback sono protetti contro NaN/Inf e sovralimentazione anche al 100% dei pomelli.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🎛️</div>
+        <h4>12 Preset d'Autore Inclusi</h4>
+        <p>Da ambient pad cinematici a shoegaze wall-of-sound e glitch lo-fi ritmici, pronti per essere richiamati con un clic.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">⚡</div>
+        <h4>Visualizzatore Real-Time</h4>
+        <p>Oscilloscopio audio in uscita e rappresentazione delle nuvole granulari attive in base a posizione nel buffer, pan stereo, volume e pitch.</p>
+      </div>
+    </section>
+
+    <!-- INSTALLATION -->
+    <section class="install-box" id="install">
+      <h3>🚀 Guida Rapida all'Installazione</h3>
+      <ol style="margin-left: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
+        <li style="margin-bottom: 12px;">Scarica il pacchetto <a href="download/ChromaCosm-Windows-v1.0.0.zip" style="color: var(--accent-yellow); font-weight: 600;">ChromaCosm-Windows-v1.0.0.zip</a> ed estrailo.</li>
+        <li style="margin-bottom: 12px;">Copia la cartella <strong>ChromaCosm.vst3</strong> nella tua cartella plugin di sistema VST3:
+          <div class="code-block">C:\Program Files\Common Files\VST3\</div>
+        </li>
+        <li style="margin-bottom: 12px;">Apri la tua DAW preferita (Ableton Live, FL Studio, Reaper, Cubase, Studio One) e fai una scansione dei nuovi VST3: troverai <strong>ChromaCosm</strong> sotto la categoria <em>DaMA Audio</em>.</li>
+        <li>Oppure esegui direttamente <strong>ChromaCosm.exe</strong> per suonarlo in Standalone senza aprire alcuna DAW!</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Sviluppato con passione da <strong>DaMA Audio</strong> con il framework C++ JUCE.</p>
+    <p style="margin-top: 8px; font-size: 0.78rem; color: #76788a;">
+      Disclaimer Legale: ChromaCosm è un software indipendente sviluppato a scopo di tributo e ricerca sonora. Tutti i marchi commerciali citati a scopo descrittivo (tra cui Hologram Electronics, Chroma Console e Microcosm) appartengono ai rispettivi proprietari e non sussiste alcuna affiliazione o sponsorizzazione formale.
+    </p>
+    <p style="margin-top: 14px;"><a href="https://github.com/DaMa-sys/ChromaCosm">Repository GitHub Ufficiale</a> • Rilasciato sotto licenza MIT</p>
+  </footer>
+
+</body>
+</html>
