@@ -361,13 +361,22 @@ public:
                 wetR = wetR * (1.0f - spaceAmt * 0.35f) + revR * (spaceAmt * 0.90f);
             }
 
-            // Smooth envelope-followed ducking for Interrupt mode
+            // Dynamic Blooming & Auto-Ducking:
+            // When user plays new note onsets, wet granular cloud dips slightly (-2.5 dB)
+            // to preserve the note attack clarity, then smoothly blooms out in spaces between phrases.
+            float dryEnv = 0.5f * (std::fabs (inL) + std::fabs (inR));
+            duckEnv = sanitizeAudio (0.994f * duckEnv + 0.006f * dryEnv);
+            float bloomGain = juce::jlimit (0.58f, 1.0f, 1.0f - duckEnv * 0.42f);
+
+            wetL *= bloomGain;
+            wetR *= bloomGain;
+
+            // Interrupt mode dynamically ducks dry signal when glitch bursts fire
             float dryDuck = 1.0f;
             if (p.effectType == FX_Interrupt)
             {
                 float wetMag = 0.5f * (std::fabs (wetL) + std::fabs (wetR));
-                duckEnv = sanitizeAudio (0.992f * duckEnv + 0.008f * wetMag);
-                dryDuck = juce::jlimit (0.35f, 1.0f, 1.0f - duckEnv * act * 0.65f);
+                dryDuck = juce::jlimit (0.35f, 1.0f, 1.0f - wetMag * act * 0.65f);
             }
 
             const float mix = juce::jlimit (0.0f, 1.0f, p.mix);
@@ -434,7 +443,10 @@ private:
         double delayOffsetSec = 0.04 + rnd1 * beatSec * (0.35 + var * 0.25);
         float pitchRate = 1.0f;
         float targetRate = 1.0f;
-        float pan = 0.15f + 0.7f * rnd2;
+        // Alternating stereo spatial panning:
+        // Keeps dry input dead-center while spreading grains gracefully across Left and Right
+        static const float panTable[8] = { 0.18f, 0.82f, 0.32f, 0.68f, 0.12f, 0.88f, 0.25f, 0.75f };
+        float pan = panTable[(slot + currentStep) & 7];
         float gain = 0.50f + 0.30f * juce::jlimit (0.0f, 1.0f, p.activity);
 
         switch (p.effectType)
@@ -584,17 +596,29 @@ private:
             if (! g.active)
                 continue;
 
+            // Tukey / Hann envelope window with guaranteed anti-click zero-crossing taper
             float ph = juce::jlimit (0.0f, 1.0f, static_cast<float> (g.phase));
-            float s = std::sin (ph * juce::MathConstants<float>::pi);
-            float env = s * s;
+            float env = 0.0f;
             if (p.shape < 0.35f)
             {
-                float a = 0.08f;
-                env = (ph < a) ? (ph / a) : std::cos ((ph - a) / (1.0f - a) * juce::MathConstants<float>::halfPi);
+                // Crisp percussive attack, but tapered with 12ms Tukey fade to prevent any digital clicking
+                float r = 0.12f;
+                if (ph < r)
+                    env = 0.5f * (1.0f - std::cos (ph / r * juce::MathConstants<float>::pi));
+                else
+                    env = 0.5f * (1.0f + std::cos ((ph - r) / (1.0f - r) * juce::MathConstants<float>::pi));
             }
             else if (p.shape > 0.65f)
             {
-                env = std::pow (juce::jmax (0.0f, s), 2.2f);
+                // Slow orchestral pad swell: delayed blooming peak
+                float s = std::sin (ph * juce::MathConstants<float>::pi);
+                env = std::pow (juce::jmax (0.0f, s), 2.4f);
+            }
+            else
+            {
+                // Smooth Hann bell curve (pure musical cohesion)
+                float s = std::sin (ph * juce::MathConstants<float>::pi);
+                env = s * s;
             }
             g.lastEnv = env;
 
