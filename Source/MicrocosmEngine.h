@@ -490,8 +490,9 @@ private:
                 const float endRates[4]   = { 1.5f, 1.0f, 0.5f, 1.0f };
                 pitchRate = startRates[var];
                 targetRate = endRates[var];
-                grainDurSec = beatSec * (0.55 + 0.2 * var);
-                delayOffsetSec = beatSec * (0.2 + 0.3 * rnd1);
+                grainDurSec = beatSec * (0.50 + 0.25 * var);
+                // Grid-snapped buffer slice (1/8th or 1/4 bar)
+                delayOffsetSec = beatSec * (0.25 * (1 + (currentStep & 3)));
                 break;
             }
             case FX_Haze:
@@ -501,8 +502,9 @@ private:
                           : (var == 3 && (rnd1 > 0.6f))  ? 2.0f
                           : (1.0f + (rnd1 - 0.5f) * hazeDetune[var]);
                 targetRate = pitchRate;
-                grainDurSec = 0.22 + beatSec * (0.65 + 0.35 * rnd2);
-                delayOffsetSec = 0.05 + rnd1 * beatSec * 1.4;
+                grainDurSec = beatSec * (0.50 + 0.25 * (currentStep & 1));
+                // Grid-snapped delay tap offset (quarter beat taps)
+                delayOffsetSec = beatSec * (0.125 * (1 + ((currentStep * 2 + slot) & 7)));
                 break;
             }
             case FX_Tunnel:
@@ -537,8 +539,9 @@ private:
                 const float intRates[4] = { 2.0f, 0.5f, 1.5f, 1.0f };
                 pitchRate = intRates[(currentStep + var) & 3];
                 targetRate = pitchRate * (var == 3 ? 0.75f : 1.0f);
-                grainDurSec = beatSec * (0.18 + 0.12 * rnd1);
-                delayOffsetSec = 0.02 + rnd2 * beatSec * 0.4;
+                grainDurSec = beatSec * 0.25;
+                // Grid-snapped bursts on 1/16th grid
+                delayOffsetSec = beatSec * (0.0625 * (1 + (currentStep & 7)));
                 break;
             }
             case FX_Arp:
