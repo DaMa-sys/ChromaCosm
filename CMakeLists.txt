@@ -5,7 +5,25 @@ project(ChromaCosm VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory("C:/JUCE/JUCE" "${CMAKE_BINARY_DIR}/JUCE" EXCLUDE_FROM_ALL)
+# -----------------------------------------------------------------------------
+# JUCE Discovery (Local Path or Automatic Git Fetch for portability)
+# -----------------------------------------------------------------------------
+set(JUCE_PATH "C:/JUCE/JUCE" CACHE PATH "Path to local JUCE installation")
+
+if(EXISTS "${JUCE_PATH}/CMakeLists.txt")
+    message(STATUS "Using local JUCE from: ${JUCE_PATH}")
+    add_subdirectory("${JUCE_PATH}" "${CMAKE_BINARY_DIR}/JUCE" EXCLUDE_FROM_ALL)
+else()
+    message(STATUS "Local JUCE not found at '${JUCE_PATH}'. Fetching JUCE 7 via Git...")
+    include(FetchContent)
+    FetchContent_Declare(
+        JUCE
+        GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
+        GIT_TAG 7.0.12
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(JUCE)
+endif()
 
 juce_add_plugin(ChromaCosm
     COMPANY_NAME "DaMA"

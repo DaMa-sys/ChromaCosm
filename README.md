@@ -18,6 +18,19 @@ Inside the archive:
 
 ---
 
+## 👨‍💻 Developer Kit (Per Sviluppatori & Sound Designer)
+Se tu o un amico volete modificare il codice sorgente, creare nuovi algoritmi o studiare l'architettura DSP:
+👉 **[Download ChromaCosm-DevKit-v1.0.0.zip](https://github.com/DaMa-sys/ChromaCosm/releases/download/v1.0.0/ChromaCosm-DevKit-v1.0.0.zip)**
+
+Il Dev Kit include:
+- Tutto il codice sorgente C++ pulito e commentato in `Source/`.
+- `CMakeLists.txt` universale (con download automatico di JUCE 7 via Git `FetchContent`, senza bisogno di configurazioni).
+- Script di compilazione a doppio clic in `scripts/build_windows.bat` e `scripts/build_windows.ps1`.
+- Manuale completo per programmatori: [DEV_GUIDE.md](file:///c:/vst%20plugin/DaMA/ChromaCosm/DEV_GUIDE.md).
+- Documento di architettura software e DSP: [ARCHITECTURE.md](file:///c:/vst%20plugin/DaMA/ChromaCosm/ARCHITECTURE.md).
+
+---
+
 ## 🎨 4 Re-Orderable Modules (20 Analog Algorithms)
 
 - 🔴 **[A] CHARACTER**:

@@ -402,6 +402,7 @@
       <a href="#moduli">4 Moduli</a>
       <a href="#algoritmi">20 Algoritmi</a>
       <a href="#installazione">Installazione</a>
+      <a href="#devkit">Dev Kit</a>
       <a href="https://github.com/DaMa-sys/ChromaCosm" target="_blank">GitHub</a>
     </nav>
   </header>
@@ -415,11 +416,15 @@
       <div class="cta-group">
         <a href="download/ChromaCosm-Windows-v1.0.0.zip" class="btn btn-primary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Scarica ChromaCosm v1.0.0 (ZIP)
+          Scarica Plugin v1.0.0 (ZIP)
+        </a>
+        <a href="download/ChromaCosm-DevKit-v1.0.0.zip" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          Scarica Dev Kit (Codice & Script)
         </a>
         <a href="https://github.com/DaMa-sys/ChromaCosm" target="_blank" class="btn btn-secondary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          Codice Sorgente su GitHub
+          GitHub Repo
         </a>
       </div>
 
@@ -558,7 +563,34 @@
       </div>
     </section>
 
-    <!-- Installation Guide -->
+    <!-- Developer Kit Section -->
+    <section class="install-box" id="devkit" style="border-color: rgba(245, 158, 11, 0.35); background: linear-gradient(180deg, #181926 0%, #12131b 100%);">
+      <div style="display:inline-block; font-size:0.78rem; font-weight:800; color:var(--accent-yellow); background:rgba(245, 158, 11, 0.15); border:1px solid rgba(245, 158, 11, 0.3); padding:4px 12px; border-radius:999px; margin-bottom:0.75rem; text-transform:uppercase;">
+        👨‍💻 Per Sviluppatori & Sound Designer
+      </div>
+      <h2>Developer Kit Ufficiale (Dev Kit)</h2>
+      <p style="color:var(--text-muted); margin-bottom:1.5rem;">
+        Vuoi esplorare il codice sorgente C++ / JUCE 7, creare un tuo algoritmo personalizzato o estendere il plugin? Abbiamo preparato un pacchetto Dev Kit completo e auto-configurante:
+      </p>
+
+      <ul style="padding-left:1.5rem; color:var(--text-muted); line-height:1.8; margin-bottom:1.5rem;">
+        <li><strong>Sorgente C++ Completo</strong>: motore DSP a 4 moduli, filtri Cytomic TPT State-Variable e interfaccia grafica in <code>Source/</code>.</li>
+        <li><strong>CMakeLists Universale</strong>: rileva installazioni JUCE locali oppure scarica automaticamente JUCE 7 da GitHub via Git (zero configurazioni richieste).</li>
+        <li><strong>Script di Build con un Clic</strong>: script Windows <code>scripts/build_windows.bat</code> e <code>scripts/build_windows.ps1</code> per compilare VST3 e Standalone in 30 secondi.</li>
+        <li><strong>Guida Completa & Diagramma DSP</strong>: manuale passo-passo <code>DEV_GUIDE.md</code> e documento <code>ARCHITECTURE.md</code>.</li>
+      </ul>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="download/ChromaCosm-DevKit-v1.0.0.zip" class="btn btn-primary" style="padding:12px 22px; font-size:0.95rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Scarica Dev Kit (ChromaCosm-DevKit.zip)
+        </a>
+        <a href="https://github.com/DaMa-sys/ChromaCosm/blob/main/DEV_GUIDE.md" target="_blank" class="btn btn-secondary" style="padding:12px 22px; font-size:0.95rem;">
+          Leggi la Guida Sviluppatore online &rarr;
+        </a>
+      </div>
+    </section>
+  </main>
     <section class="install-box" id="installazione">
       <h2>Installazione in 3 Semplici Passi</h2>
       <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
