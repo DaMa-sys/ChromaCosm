@@ -28,7 +28,6 @@ target_sources(ChromaCosm
         Source/PluginEditor.cpp
         Source/PluginEditor.h
         Source/ChromaEngine.h
-        Source/MicrocosmEngine.h
 )
 
 target_compile_definitions(ChromaCosm

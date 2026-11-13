@@ -1,93 +1,73 @@
-# ChromaCosm (VST3 & Standalone Audio Plugin)
+# ChromaCosm (Chroma Console Studio Edition)
+### VST3 & Standalone Audio Plugin for Windows 64-bit
 
-Dual studio multi-effects processor combining the warm, vintage instability of the **Chroma Console** with the granular synthesis, micro-looping, and glitch multi-delays of the **Microcosm**.
+Studio multi-effects processor inspired by the boutique **Chroma Console**, delivering analog coloration, tube saturation, tape drift, vintage modulation, cascading diffusion, and lo-fi textures with an endlessly re-orderable 4-module signal chain.
 
 [![Download Release](https://img.shields.io/badge/Download-Windows%20v1.0.0%20(Pre--Compiled)-orange?style=for-the-badge&logo=windows)](https://github.com/DaMa-sys/ChromaCosm/releases/latest)
 [![Website](https://img.shields.io/badge/Official-Website%20Showcase-blue?style=for-the-badge)](https://dama-sys.github.io/ChromaCosm/)
 
 ---
 
-## ⚡ Download Ready-To-Use Plugin (No Compilation Required)
-If you don't want to build from source, download the pre-compiled binary package:
+## ⚡ Download Pre-Compiled Binaries (Direct Install)
+No compilation required! Download the official distribution package:
 👉 **[Download ChromaCosm-Windows-v1.0.0.zip](https://github.com/DaMa-sys/ChromaCosm/releases/download/v1.0.0/ChromaCosm-Windows-v1.0.0.zip)**
 
-Inside the ZIP:
-1. `ChromaCosm.vst3` — Copy to `C:\Program Files\Common Files\VST3\` to use in Ableton Live, FL Studio, Reaper, Cubase, Studio One.
-2. `ChromaCosm.exe` — Standalone app (run directly to play without opening a DAW).
+Inside the archive:
+1. `ChromaCosm.vst3` — Copy to `C:\Program Files\Common Files\VST3\DaMA\` to use in Ableton Live, FL Studio, Reaper, Cubase, Studio One.
+2. `ChromaCosm.exe` — Standalone app (run directly to play without launching a DAW).
 
 ---
 
-## 🎨 Visual Interface & Features
+## 🎨 4 Re-Orderable Modules (20 Analog Algorithms)
 
-- **Chroma Console (Left Pedal)**:
-  - Freely re-orderable 4-module signal chain (`CHAR`, `MOVE`, `DIFF`, `TEXT`).
-  - **4 Colored Modules (20 Algorithms)**:
-    - 🔴 **CHARACTER**: Drive, Sweeten, Fuzz, Howl, Swell.
-    - 🟡 **MOVEMENT**: Doubler, Vibrato, Phaser, Tremolo, Pitch (-12..+12 st).
-    - 🟢 **DIFFUSION**: Cascade, Reels, Space, Collage, Reverse.
-    - 🔵 **TEXTURE**: Filter (Morphing LPF/HPF), Squash, Cassette, Broken, Interference.
-  - **Calibration**: Low, Med, High, Synth headroom matching.
-  - **Capture**: Ephemeral loop sustainer.
-  - **Secondary Drift & Effect Vol controls** per module.
+- 🔴 **[A] CHARACTER**:
+  - **DRIVE**: Dynamic, touch-responsive warm overdrive.
+  - **SWEETEN**: Studio tube preamp with harmonic bloom.
+  - **FUZZ**: High-gain vintage silicon fuzz with infinite sustain.
+  - **HOWL**: Aggressive preamped resonance filter.
+  - **SWELL**: Automatic slow-gear envelope for lush string & pad swells.
 
-- **Microcosm (Right Pedal)**:
-  - **11 Effects across 4 Categories + 4 Preset Variations (A, B, C, D = 44 Algorithms)**:
-    - 🌊 **Micro Loop**: Mosaic, Seq, Glide.
-    - ☁️ **Granules**: Haze, Tunnel, Strum.
-    - ⚡ **Glitch**: Blocks, Interrupt, Arp.
-    - 🌌 **Multi-Delay**: Pattern, Warp.
-  - **Secondary Parameters**: Pitch Modulation (Rate & Depth), 4 Space Reverb Modes (`Room`, `Hall`, `Cathedral`, `Shimmer Abyss`), Filter Resonance.
-  - **Hold Sampler**: Infinite ambient freeze footswitch.
-  - **40-Second Stereo Phrase Looper**: Rec/Play/Overdub, Stop, Clear, Speed (0.5x, 1x, 2x), Reverse, and Pre/Post FX routing.
+- 🟡 **[B] MOVEMENT**:
+  - **DOUBLER**: Stereo dimensional chorus & tape flanger.
+  - **VIBRATO**: True pitch vibrato with organic tape wow & flutter.
+  - **PHASER**: 6-stage warm analog all-pass phase shifter with feedback.
+  - **TREMOLO**: Rhythmic amplitude modulation with soft/square contours.
+  - **PITCH**: Shimmer octave doubler and subtle micro-pitch warble.
 
-- **Global Controls**:
-  - **Combo Routing**:
-    - `CHROMA -> MICROCOSM` (Console drive/tape into granular clouds)
-    - `MICROCOSM -> CHROMA` (Granular clouds crushed & filtered by tape/fuzz)
-    - `PARALLEL BLEND` (Both pedals processing in parallel)
-  - **Interactive Guide (? GUIDA)**: 4-tab integrated manual inside the plugin.
-  - **Hover Descriptions (INFO MOUSE)**: Toggleable real-time tooltip banner explaining every single knob, button, algorithm, and variation on hover.
-  - **12 Factory Presets**: Curated ambient, shoegaze, lo-fi, and glitch combinations.
-  - **Tap Tempo**: Manual tap override + automatic host DAW BPM tempo sync.
-  - **Real-Time Visualizer**: Audio output oscilloscope + live granular clouds (spatial pan, amplitude, and pitch tinting).
+- 🟢 **[C] DIFFUSION**:
+  - **CASCADE**: Staged stereo diffusion delay with cross-coupled feedback.
+  - **REELS**: Open reel-to-reel tape echo with progressive tape saturation.
+  - **SPACE**: 3D cavernous plate reverb with infinite lush tail decay.
+  - **COLLAGE**: Asymmetrical granular delay with floating stereo grains.
+  - **REVERSE**: Real-time tape backward reverse echo.
+
+- 🔵 **[D] TEXTURE**:
+  - **FILTER**: Cytomic TPT State-Variable Filter (unconditionally stable).
+  - **SQUASH**: Studio optical compressor (LA-2A style) with punch & warmth.
+  - **CASSETTE**: Type-I cassette emulation with gentle high-end roll-off.
+  - **BROKEN**: Digital/analog bit degradation, drop-outs & worn cable grit.
+  - **INTERFERENCE**: AM radio receiver, magnetic hum & ring modulation.
 
 ---
 
-## 🛡️ DSP Stability & Safety
-- Built using **TPT (Topology-Preserving Transform) State-Variable Filters** that remain unconditionally stable across extreme audio-rate modulation.
-- Internal saturation and `sanitizeAudio` guards on all feedback paths (`Repeats`, `Cascade`, `Reels`, `Space Reverb`, `Looper`). Pushing knobs to 100% will never produce `NaN`/`Inf` or silent freeze glitches.
-- Soft-knee output ceiling protects your DAW master bus.
+## 🎛️ Performance & Studio Features
+
+- **Freely Re-orderable Signal Flow**: Switch routing orders in real time (`Standard`, `Reverb into Drive`, `Pre-Filter/Squash`, `Reverse Chain`, etc.).
+- **Capture Footswitch**: Ephemeral loop sustainer that freezes incoming audio into an ambient drone pad.
+- **Drift Engine**: Multi-stage organic Pink/Perlin noise generator mimicking thermal and mechanical tape instabilities.
+- **Master Console Tilt EQ**: Global tonal balance slider to quickly warm up or brighten the entire mix.
+- **Interactive Guide (? GUIDA)**: 3-tab complete manual integrated inside the plugin interface.
+- **Live Tooltip Banner (INFO MOUSE)**: Dynamic explanation of every knob, switch, and algorithm on hover.
+- **12 Factory Presets**: Carefully tuned presets for electric guitar, synth, bass, and mastering bus.
 
 ---
 
-## 🚀 Building from Source
-
-### Prerequisites
-- **CMake** 3.22 or newer
-- **Visual Studio 2022** (Windows) or **Xcode / Clang** (macOS)
-- **JUCE** framework
-
-### Build Instructions
-```bash
-git clone https://github.com/DaMa-sys/ChromaCosm.git
-cd ChromaCosm
-cmake -B build -S .
-cmake --build build --config Release
-```
-
-The compiled artefacts will be located in:
-- `build/ChromaCosm_artefacts/Release/VST3/ChromaCosm.vst3`
-- `build/ChromaCosm_artefacts/Release/Standalone/ChromaCosm.exe`
+## 🛡️ DSP Stability & Audio Quality
+- Developed with JUCE 7 and C++17.
+- **Cytomic TPT SVF filters** remain unconditionally stable under rapid modulation without self-oscillation explosion.
+- Soft transformer limiting protects your DAW master bus from clipping.
 
 ---
 
-## 📄 Legal Disclaimer & Trademarks
-
-**DaMA ChromaCosm** is an independent, non-commercial open-source audio research project developed by **DaMA Audio**.
-
-- All product names, logos, and brands mentioned (including *Hologram Electronics*, *Chroma Console*, and *Microcosm*) are the registered trademarks and intellectual property of their respective owners.
-- Their mention here is purely descriptive and for comparative/educational reference regarding audio topology and workflow inspiration.
-- This software is NOT endorsed, sponsored, affiliated with, or produced by Hologram Electronics.
-- All algorithms are original C++/JUCE DSP implementations.
-
-Licensed under the MIT License.
+## 📜 Legal Disclaimer
+ChromaCosm is an original software synthesizer and audio processor developed independently by **DaMA Audio Systems**. All third-party product names and trademarks (such as Chroma Console) are property of their respective owners and are mentioned strictly for descriptive and workflow-referencing purposes.

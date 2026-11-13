@@ -130,6 +130,7 @@ public:
         // Master Chroma Controls
         float masterMix = 1.0f;
         float outputLevel = 0.75f;
+        float globalTilt = 0.5f;
         bool bypass = false;
         bool captureActive = false;
         double bpm = 120.0;
@@ -190,6 +191,7 @@ public:
         textFilterL.reset();
         textFilterR.reset();
         charTiltLP_L = charTiltLP_R = 0.0f;
+        masterTiltLP_L = masterTiltLP_R = 0.0f;
         dcBlockX_L = dcBlockY_L = dcBlockX_R = dcBlockY_R = 0.0f;
 
         lfoPhase = 0.0;
@@ -217,12 +219,14 @@ public:
     {
         switch (preset)
         {
-            case 0:  return { 0, 1, 2, 3 };
-            case 1:  return { 3, 0, 1, 2 };
-            case 2:  return { 2, 0, 1, 3 };
-            case 3:  return { 1, 2, 0, 3 };
-            case 4:  return { 0, 2, 1, 3 };
-            case 5:  return { 3, 2, 1, 0 };
+            case 0:  return { 0, 1, 2, 3 }; // CHAR -> MOVE -> DIFF -> TEXT (Standard)
+            case 1:  return { 3, 0, 1, 2 }; // TEXT -> CHAR -> MOVE -> DIFF (Pre-Filter/Squash)
+            case 2:  return { 2, 0, 1, 3 }; // DIFF -> CHAR -> MOVE -> TEXT (Reverb into Drive)
+            case 3:  return { 1, 2, 0, 3 }; // MOVE -> DIFF -> CHAR -> TEXT (Vintage Vibe)
+            case 4:  return { 0, 2, 1, 3 }; // CHAR -> DIFF -> MOVE -> TEXT (Post-Echo Modulation)
+            case 5:  return { 0, 1, 3, 2 }; // CHAR -> MOVE -> TEXT -> DIFF (Tape before Reverb)
+            case 6:  return { 1, 0, 2, 3 }; // MOVE -> CHAR -> DIFF -> TEXT (Phaser before Drive)
+            case 7:  return { 3, 2, 1, 0 }; // TEXT -> DIFF -> MOVE -> CHAR (Reverse Chain)
             default: return { 0, 1, 2, 3 };
         }
     }
@@ -341,6 +345,30 @@ public:
                 }
                 sigL = sanitizeAudio (sigL);
                 sigR = sanitizeAudio (sigR);
+            }
+
+            // Global Console Tilt EQ
+            if (std::fabs (params.globalTilt - 0.5f) > 0.005f)
+            {
+                const float t = (params.globalTilt - 0.5f) * 2.0f; // [-1.0 .. 1.0]
+                masterTiltLP_L += 0.08f * (sigL - masterTiltLP_L);
+                masterTiltLP_R += 0.08f * (sigR - masterTiltLP_R);
+                const float lowL = masterTiltLP_L;
+                const float hiL  = sigL - lowL;
+                const float lowR = masterTiltLP_R;
+                const float hiR  = sigR - lowR;
+                if (t < 0.0f)
+                {
+                    const float b = -t;
+                    sigL = lowL * (1.0f + b * 0.40f) + hiL * (1.0f - b * 0.35f);
+                    sigR = lowR * (1.0f + b * 0.40f) + hiR * (1.0f - b * 0.35f);
+                }
+                else
+                {
+                    const float b = t;
+                    sigL = lowL * (1.0f - b * 0.35f) + hiL * (1.0f + b * 0.40f);
+                    sigR = lowR * (1.0f - b * 0.35f) + hiR * (1.0f + b * 0.40f);
+                }
             }
 
             // Soft console transformer output limiting
@@ -937,6 +965,7 @@ private:
     float swellEnv = 0.0f;
     float squashEnv = 0.0f;
     float charTiltLP_L = 0.0f, charTiltLP_R = 0.0f;
+    float masterTiltLP_L = 0.0f, masterTiltLP_R = 0.0f;
     float dcBlockX_L = 0.0f, dcBlockY_L = 0.0f, dcBlockX_R = 0.0f, dcBlockY_R = 0.0f;
 
     double lfoPhase = 0.0;

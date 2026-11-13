@@ -1,7 +1,6 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "ChromaEngine.h"
-#include "MicrocosmEngine.h"
 
 class ChromaCosmAudioProcessor : public juce::AudioProcessor
 {
@@ -36,36 +35,35 @@ public:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState apvts;
 
-    // Factory Presets
+    // Factory Presets for Chroma Console
     struct PresetData
     {
         juce::String name;
-        int comboRouting; // 0: Chroma->Micro, 1: Micro->Chroma, 2: Parallel
-        // Chroma
         int chromaOrder;
-        int charType; float charTilt, charAmt;
-        int moveType; float moveRate, moveAmt, moveDrift;
-        int diffType; float diffTime, diffAmt, diffDrift;
-        int textType; float textTilt, textAmt;
+        int calibration; // 0: Lo-Gain, 1: Line, 2: Hot/Inst, 3: Studio
+        // Character
+        int charType; float charTilt, charAmt, charVol;
+        // Movement
+        int moveType; float moveRate, moveAmt, moveDrift, moveVol;
+        // Diffusion
+        int diffType; float diffTime, diffAmt, diffDrift, diffVol;
+        // Texture
+        int textType; float textTilt, textAmt, textVol;
+        // Master
         float chromaMix;
-        // Microcosm
-        int microFX, microVar, microSubdiv;
-        float microTime, microActivity, microRepeats, microShape, microFilter, microRes;
-        float microSpace; int microSpaceMode;
-        float microPitchRate, microPitchDepth;
-        bool microRev;
-        float microMix;
+        float globalTilt;
+        float outputLevel;
     };
 
     const std::vector<PresetData>& getPresets() const { return factoryPresets; }
     void loadPreset (int index);
 
-    // Tap Tempo & Looper access
+    // Tap Tempo & Clock
     void triggerTapTempo();
     double getEffectiveBpm() const { return currentBpm.load(); }
 
-    ChromaCosm::MicrocosmEngine& getMicrocosmEngine() { return microcosmEngine; }
-    const ChromaCosm::MicrocosmEngine& getMicrocosmEngine() const { return microcosmEngine; }
+    ChromaCosm::ChromaEngine& getChromaEngine() { return chromaEngine; }
+    const ChromaCosm::ChromaEngine& getChromaEngine() const { return chromaEngine; }
 
     // Visual meters & oscilloscope
     float getInputLevel() const  { return inputMeter.load(); }
@@ -76,8 +74,6 @@ private:
     void initFactoryPresets();
 
     ChromaCosm::ChromaEngine chromaEngine;
-    ChromaCosm::MicrocosmEngine microcosmEngine;
-    juce::AudioBuffer<float> parallelBuffer;
 
     std::vector<PresetData> factoryPresets;
     int currentPresetIndex = 0;
